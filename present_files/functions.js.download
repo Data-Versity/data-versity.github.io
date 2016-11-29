@@ -1,0 +1,443 @@
+;(function($, window, document, undefined) {
+	var $win = $(window);
+	var $doc = $(document);
+
+	$doc.ready(function() {
+
+		dropdowns('.nav');
+		dropdowns('.main-nav');
+		
+		// hide SharePoint recent items
+		$(".ms-core-listMenu-item:contains('Recent')").parent().hide();
+					
+		// make all pdf files open in new window
+		$('a[href$=".pdf"]').attr('target','_blank');
+
+		// wrap tables in responsive div
+		$( ".table" ).wrap( "<div class='table-responsive'></div>" );
+		
+		// nav
+		$('.nav-secondary a').on('click', function(event) {
+			event.preventDefault();
+			
+			var ddName = $(this).attr('href');
+			var currentDd = $('.dropdown-item.current').attr('id');
+			
+			if($(this).parent().hasClass('current')) {
+				$('.nav-secondary li').removeClass('current');
+				$('.nav-secondary-dropdowns').slideUp(300);
+			} else {
+				$(ddName).addClass('current').siblings().removeClass('current');
+				$(this).parent().addClass('current').siblings().removeClass('current');
+				$('.nav-secondary-dropdowns').slideDown('fast');
+			}
+
+			if (currentDd == ddName) {
+				$(this).parent().siblings().removeClass('active');
+				$(this).parent().addClass('active');
+			}
+		});
+
+		$('.nav-secondary-dropdowns-close').on('click', function(event) {
+			event.preventDefault();
+
+			$('.nav-secondary li').removeClass('current');
+			$('.nav-secondary-dropdowns').slideUp(300)
+		});
+		
+		$('.eq-height').equalizeHeight();
+		$('.nav-dropdown').equalizeHeight();
+
+
+		// nav-secondary close
+		$doc.on('click touchstart', function(e){
+			var $target = $(e.target);
+
+			if (!$target.closest('.nav-secondary').length && !$target.closest('.nav-secondary-dropdowns').length) {
+				$('.nav-secondary li').removeClass('current');
+				$('.nav-secondary-dropdowns').slideUp(300)
+			}
+		});
+		
+		
+		tabs();
+
+		$('.keywords-select select').selecter();
+
+		// footer calendar
+		/*$('#datepicker').datepicker();*/
+
+		// select
+		$('.select select').on('change', function() {
+			var $select = $(this);
+			var selectedText = $select.find('option:selected').text();
+
+			$select.parent().find('.select-toggle').html(selectedText);
+		});
+
+		/* commented out to disable footer expanding menu */
+		// footer expand
+		/*$('.footer-top-nav a').on('click', function(event) {
+			event.preventDefault();
+
+			$('.footer-body').stop(true).slideToggle();
+		});*/
+
+		// custom scroll
+		$('.custom-scroll').jScrollPane();
+
+		// mobile sidebar
+		$('.sidebar-toggle, .visible-xs-inline').on('click', function() {
+			$('.wrapper-inner').addClass('sidebar-visible');
+		});
+
+		$('.sidebar-close, .overlay').on('click', function(event) {
+			event.preventDefault();
+
+			$('.wrapper-inner').removeClass('sidebar-visible');
+		});
+
+		// navDropdown();
+		
+
+		// tabs mobile
+		$('.tabs-nav-toggle').on('click', function() {
+			$(this).parent().toggleClass('open');
+		});
+
+		$('.tabs-nav a').on('click', function() {
+			var $tabLink = $(this);
+
+			$tabLink.closest('.tabs-nav').removeClass('open');
+			$('.tabs-nav-toggle').html($tabLink.html());
+		});
+
+		// back to top
+		$('.back-to-top').on('click', function(event) {
+			event.preventDefault();
+
+			$('html, body').animate({
+				scrollTop: 0
+			}, 1000);
+		});
+		
+
+		$win.load(function() {
+			// remove imgPrefetch
+			$('#imgPrefetch > img').remove();
+			
+			$('#imgPrefetch > img:not([alt])').attr('alt', 'SharePoint Image');
+		
+			// slider members
+			$('.slider-members .slides').carouFredSel({
+				width: '100%',
+				scroll: {
+					items: 1
+				},
+				items: {
+					visible: 'odd+2'
+				},
+				auto: false,
+				prev: $('.slider-members .slider-prev'),
+				next: $('.slider-members .slider-next'),
+			});
+
+			// slider updates
+			$('.slider-updates .slides').carouFredSel({
+				width: '100%',
+				items: {
+					visible: 1
+				},
+				responsive: true,
+				scroll: {
+					items: 1,
+					fx: 'crossfade'
+				},
+				auto: {
+					play: true,
+					duration: 1000,
+					pauseOnHover: true
+				},
+				pagination: {
+					container: $('.slider-updates .slider-paging')
+				},
+				prev: $('.slider-updates .slider-prev'),
+				next: $('.slider-updates .slider-next')
+			});
+
+			// slider statistics
+			$('.slider-statistics .slides').carouFredSel({
+				width: '100%',
+				swipe: {
+					onTouch: true
+				},
+				items: {
+					visible: 4
+				},
+				scroll: {
+					items: 1
+				},
+				auto: false,
+				prev: $('.slider-statistics .slider-prev'),
+				next: $('.slider-statistics .slider-next')
+			});
+
+			// slider updates
+			$('.slider-photos .slides').carouFredSel({
+				width: '100%',
+				swipe: {
+					onTouch: true
+				},
+				responsive: true,
+				auto: false,
+				pagination: {
+					container: $('.slider-photos .slider-paging')
+				},
+				prev: $('.slider-photos .slider-prev'),
+				next: $('.slider-photos .slider-next')
+			});
+
+			$('.article-image').each(function() {
+				var $holder = $(this);
+
+				$holder.width($holder.find('img').width());
+			})
+
+
+			// footer position
+			var footerOffset = $('.footer-bottom').offset().top;
+			var footerBottomHeight = $('.footer-bottom').height();
+			var winHeight = $win.height();
+			var scroll = $win.scrollTop();
+			var footerBottomPosition = scroll + winHeight - footerBottomHeight + 130; 
+
+			if(footerOffset <= footerBottomPosition) {
+				$('.footer-top').addClass('static');
+			} else {
+				$('.footer-top').removeClass('static');
+			}
+			
+			$win.on('scroll', function() {
+				scroll = $win.scrollTop();
+				var footerBottomPosition = scroll + winHeight - footerBottomHeight + 130;
+
+				if(footerOffset <= footerBottomPosition) {
+					$('.footer-top').addClass('static');
+				} else {
+					$('.footer-top').removeClass('static');
+				}
+			});
+
+			$win.on('resize', function() {
+				$('.custom-scroll').jScrollPane();
+			});
+			
+				
+			// mobile navigation
+			//$('.main-nav').naver();
+			$('.ms-core-navigation').naver();
+								
+		});
+	});
+
+	$.fn.equalizeHeight = function() {
+		var maxHeight = 0, itemHeight;
+		
+		for (var i = 0; i < this.length; i++) {
+			itemHeight = $(this[i]).height();
+			if (maxHeight < itemHeight) {
+				maxHeight = itemHeight;
+			}
+		}
+		
+		return this.height(maxHeight);
+	}
+	function tabs(){
+		// This class will be added to active tab link 
+		// and the content container
+		var activeTabClass = 'current';
+		
+		$('.tabs-nav a').on('click', function(event) {
+			var $tabLink = $(this);
+			var $targetTab = $($tabLink.attr('href'));
+		
+			$tabLink
+				.parent() // go up to the <li> element
+				.add($targetTab)
+				.addClass(activeTabClass)
+					.siblings()
+					.removeClass(activeTabClass);
+			
+			event.preventDefault();
+
+			$tabLink.closest('.tabs').find('.custom-scroll').jScrollPane();
+		});
+	}
+
+	function dropdowns(nav) {
+		$(nav).find('a[data-dropdown]').on('click', function(event) {
+			event.preventDefault();
+		});
+		
+		$(nav).find('a[data-dropdown]').on('keypress', function(event) {
+			event.preventDefault();
+		});
+
+		
+		$(nav).find('a[data-dropdown]').on('click', function() {
+			var ddName = $(this).attr('data-dropdown');
+			$('#' + ddName).addClass('visible').siblings().removeClass('visible');
+
+			var visibleDd = $(nav).find('.nav-dropdown.visible').attr('id');
+
+			$(nav).find('.nav-dropdowns').show();
+
+			if (visibleDd == ddName) {
+				$(this).parent().siblings().removeClass('hover');
+				$(this).parent().addClass('hover');
+			}
+		});
+		
+		$(nav).find('a[data-dropdown]').on('keyup', function() {
+			var ddName = $(this).attr('data-dropdown');
+			$('#' + ddName).addClass('visible').siblings().removeClass('visible');
+
+			var visibleDd = $(nav).find('.nav-dropdown.visible').attr('id');
+
+			$(nav).find('.nav-dropdowns').show();
+
+			if (visibleDd == ddName) {
+				$(this).parent().siblings().removeClass('hover');
+				$(this).parent().addClass('hover');
+			}
+		});
+
+
+		$(nav).on('mouseleave', function() {
+			$(nav).find('.nav-dropdowns').hide();
+			$(nav).find('.hover').removeClass('hover');
+		});
+		
+		$(nav).on('blur', function() {
+			$(nav).find('.nav-dropdowns').hide();
+			$(nav).find('.hover').removeClass('hover');
+		});
+
+	}
+ 
+})($, window, document);
+
+
+
+// Accordion / collapsing side navigation
+
+function accordionMe(selector, initalOpeningClass) {
+	var speedo = 300;
+	var $this = selector;
+	var accordionStyle = true;
+
+	// First of all, hide all ul's:
+	$this.find("li>ul").hide(); 
+
+	// Then for each li you find in that ul,
+	$this.find("li").each(function(){ 
+		 // that isn't empty,
+		 if ($(this).find("ul").size() != 0) { 
+			// find all the ones at the top,
+			if ($(this).find("a:first")) { 
+				// and make sure it won't do anything on click.
+				$(this).find("a:first").click(function(){ return false; });
+				// Optional: if you want to style the non-clickable links, 
+				// then uncomment the code below. 
+				//$(this).find("a:first").addClass("no-click");
+			}
+		 }
+	});
+
+	// Open all items.
+	$this.find("li."+initalOpeningClass).each(function(){ 
+		 $(this).parents("ul").slideDown(speedo); 
+	});
+
+	// Execute this function on click of li with an a tag.
+	$this.find("li a").click(function(){ 
+		 if ($(this).parent().find("ul").size() != 0) {
+			if (accordionStyle) { 
+			if(!$(this).parent().find("ul").is(':visible')){
+				// Fetch all parents.
+				parents = $(this).parent().parents("ul"); 
+				// Fetch all visible ul's.
+				visible = $this.find("ul:visible"); 
+				// Loop through.
+				visible.each(function(visibleIndex){ 
+					 var close = true;
+					 // Check if the parent is closed.
+					 parents.each(function(parentIndex){ 
+						if(parents[parentIndex] == visible[visibleIndex]){
+						close = false;
+						return false;
+						}
+					 });
+					 // If closed, slide the content of the ul up 
+					 // (so collapse).
+					 if(close){ 
+						if($(this).parent().find("ul") != 
+						visible[visibleIndex]){
+						$(visible[visibleIndex]).slideUp(speedo);
+						}
+					 }
+				});
+			}
+			}
+			if($(this).parent().find("ul:first").is(":visible")) {
+			$(this).parent().find("ul:first").slideUp(speedo);
+			}
+			else {
+			$(this).parent().find("ul:first").slideDown(speedo);
+			}
+		 }
+	});
+}
+$(function runOnInitLoad() {
+	accordionMe($("#zz2_RootAspMenu"), "selected");  
+	accordionMe($("#zz3_RootAspMenu"), "selected");  
+	accordionMe($("#zz4_RootAspMenu"), "selected");  
+	accordionMe($("#zz9_RootAspMenu"), "selected");  
+	accordionMe($("#zz10_RootAspMenu"), "selected");  
+	accordionMe($("#zz11_RootAspMenu"), "selected");  
+	accordionMe($("#zz12_RootAspMenu"), "selected");  
+	accordionMe($("#zz13_RootAspMenu"), "selected");  
+	accordionMe($("#zz14_RootAspMenu"), "selected");  
+	accordionMe($("#zz15_RootAspMenu"), "selected");  
+	accordionMe($("#zz16_RootAspMenu"), "selected");  
+});
+
+ExecuteOrDelayUntilScriptLoaded(function() { runOnInitLoad(); });
+
+$(function(){
+	// bind change event to select
+	$('#login_select').on('change', function () {
+		var url = $(this).val(); // get selected value
+		if (url) { // require a URL
+			window.location = url; // redirect
+		}
+		return false;
+	});
+});
+	
+function SubmitUHDSearch(sVal, e) {
+	var keynum;
+	keynum = 0;
+
+	if(window.event) { 
+		keynum = e.keyCode;
+	}
+		else if(e.which) { 
+		keynum = e.which;
+	}
+	if (keynum == 13) {
+		//alert('keynum= ' + keynum);
+				document.location.href='/search/pages/default.aspx#k=' + sVal;
+				return false;	
+	}
+}

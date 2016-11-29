@@ -1,0 +1,62 @@
+/* ==========================================================================
+	#Fonts
+========================================================================== */
+@font-face {
+    font-family: 'Garamond Pro Italic';
+    src: url('fonts/agaramondproitalic-webfont.eot');
+    src: url('fonts/agaramondproitalic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/agaramondproitalic-webfont.woff2') format('woff2'),
+         url('fonts/agaramondproitalic-webfont.woff') format('woff'),
+         url('fonts/agaramondproitalic-webfont.ttf') format('truetype'),
+         url('fonts/agaramondproitalic-webfont.svg#adobe_garamond_proitalic') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Garamond Pro';
+    src: url('fonts/agaramondproregular-webfont.eot');
+    src: url('fonts/agaramondproregular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/agaramondproregular-webfont.woff2') format('woff2'),
+         url('fonts/agaramondproregular-webfont.woff') format('woff'),
+         url('fonts/agaramondproregular-webfont.ttf') format('truetype'),
+         url('fonts/agaramondproregular-webfont.svg#adobe_garamond_proregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura Heavy';
+    src: url('fonts/futurastdheavy-webfont.eot');
+    src: url('fonts/futurastdheavy-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/futurastdheavy-webfont.woff2') format('woff2'),
+         url('fonts/futurastdheavy-webfont.woff') format('woff'),
+         url('fonts/futurastdheavy-webfont.ttf') format('truetype'),
+         url('fonts/futurastdheavy-webfont.svg#futura_stdheavy') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura Book';
+    src: url('fonts/futurastdbook-webfont.eot');
+    src: url('fonts/futurastdbook-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/futurastdbook-webfont.woff2') format('woff2'),
+         url('fonts/futurastdbook-webfont.woff') format('woff'),
+         url('fonts/futurastdbook-webfont.ttf') format('truetype'),
+         url('fonts/futurastdbook-webfont.svg#futura_stdbook') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura Bold';
+    src: url('fonts/futurastdbold-webfont.eot');
+    src: url('fonts/futurastdbold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/futurastdbold-webfont.woff2') format('woff2'),
+         url('fonts/futurastdbold-webfont.woff') format('woff'),
+         url('fonts/futurastdbold-webfont.ttf') format('truetype'),
+         url('fonts/futurastdbold-webfont.svg#futura_std_bookbold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}

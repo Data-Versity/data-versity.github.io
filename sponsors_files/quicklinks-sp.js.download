@@ -1,0 +1,218 @@
+/* Quicklinks Script for UHD */
+
+/* ----- GLOBAL VARIABLES ------ */
+
+(function($){$.setCookie=function(name,value,options){if(typeof name==='undefined'||typeof value==='undefined')return false;var str=name+'='+encodeURIComponent(value);if(options.domain)str+='; domain='+options.domain;if(options.path)str+='; path='+options.path;if(options.duration){var date=new Date();date.setTime(date.getTime()+options.duration*24*60*60*1000);str+='; expires='+date.toGMTString();}if(options.secure)str+='; secure';return document.cookie=str;};$.delCookie=function(name){return $.setCookie(name,'',{duration:-1});};$.readCookie=function(name){var value=document.cookie.match('(?:^|;)\\s*'+name.replace(/([-.*+?^${}()|[\]\/\\])/g,'\\$1')+'=([^;]*)');return(value)?decodeURIComponent(value[1]):null;};$.CooQueryVersion='v 2.0';})(jQuery);
+
+
+// MAX_QL_ITEMS: maximum number of items that can be stored in quicklinks
+//   Note: the maximum size a cookie is 4KB 
+var MAX_QL_ITEMS = '22';
+var MAX_QL_COLUMN = '8';
+
+// COOKIE_TIME: Time in days the cookie should last (5 years)
+var COOKIE_TIME = '1825';
+// COOKIE_DOMAIN: Host/ Domain for which the cookie applies
+var COOKIE_DOMAIN = "www.uhd.edu";
+
+// QL_COOKIE_NAME: Name of the cookie that will be stored
+var QL_COOKIE_NAME = "uhd_quick_links";
+
+//QL_ID: ID of the list (UL) that will contain the quicklinks
+var QL_ID = "uhd_ql_list";
+var QL_ID_2 = "uhd_ql_list_2";
+var QL_ID_3 = "uhd_ql_list_3";
+
+// QL_ALL_NAME: name of array containing all quicklinks
+var QL_ALL_NAME = "index";
+// QL_ALL_FILE: Get all available links from the Site Index file
+ 
+
+var QL_ALL_FILE = "/_catalogs/masterpage/uhd/js/ql/JSindex.js";
+
+//var QL_ALL_FILE = allDocs;
+// QL_ALL: Array of all quicklinks
+var QL_ALL;
+
+// CUSTOMIZE_NAME: name of the Customize Quicklinks label
+var CUSTOMIZE_NAME = "Customize Quick Links";
+// CUSTOMIZE_URL: URL to the Quicklinks customize page
+// Set to '' if you don't want to automatically add it to QL_ID
+var CUSTOMIZE_URL = "/Pages/Quick-Links.aspx";
+
+// default quicklinks. the ids have to match the full quicklinks in QL_ALL_FILE
+var QL_DEFAULT = new Array();
+
+QL_DEFAULT[0]="id1004"; id1004 = new Array(2);id1004[0]="Academic Calendar";id1004[1]="https://www.uhd.edu/academics/calendars/Pages/default.aspx";
+QL_DEFAULT[1]="id1003"; id1003 = new Array(2);id1003[0]="Academic Affairs";id1003[1]="https://www.uhd.edu/academics/Pages/academic-index.aspx";
+QL_DEFAULT[2]="id1011"; id1011 = new Array(2);id1011[0]="Admissions";id1011[1]="https://www.uhd.edu/admissions/Pages/admissions-index.aspx";
+QL_DEFAULT[3]="id1020"; id1020 = new Array(2);id1020[0]="Blackboard";id1020[1]="https://www.uhd.edu/computing/services-training/blackboard/Pages/UHDBlackboard.aspx";
+QL_DEFAULT[4]="id1021"; id1021 = new Array(2);id1021[0]="Bookstore";id1021[1]="http://uh-downtown.bncollege.com/webapp/wcs/stores/servlet/BNCBHomePage?storeId=19558&catalogId=10001&langId=-1";
+QL_DEFAULT[5]="id1028"; id1028 = new Array(2);id1028[0]="Career Development Center";id1028[1]="https://www.uhd.edu/student-resources/career/Pages/career-index.aspx";
+QL_DEFAULT[6]="id1029"; id1029 = new Array(2);id1029[0]="Cashier's Office";id1029[1]="https://www.uhd.edu/student-resources/cashiers/Pages/default.aspx";
+QL_DEFAULT[7]="id1047"; id1047 = new Array(2);id1047[0]="Directory";id1047[1]="http://www.uhd.edu/directory/";
+QL_DEFAULT[8]="id1052"; id1052 = new Array(2);id1052[0]="Employment Services and Operations";id1052[1]="https://www.uhd.edu/administration/employment-services-operations/Pages/hr-index.aspx";
+QL_DEFAULT[9]="id1056"; id1056 = new Array(2);id1056[0]="Events Calendar";id1056[1]="https://calendar.uhd.edu/";
+QL_DEFAULT[10]="id1060"; id1060 = new Array(2);id1060[0]="Financial Aid";id1060[1]="https://www.uhd.edu/financial/Pages/financial-index-2.aspx";
+QL_DEFAULT[11]="id1062"; id1062 = new Array(2);id1062[0]="GatorMail";id1062[1]="https://gatormail.uhd.edu/";
+QL_DEFAULT[12]="id1069"; id1069 = new Array(2);id1069[0]="Information Technology Services (Computing)";id1069[1]="https://www.uhd.edu/computing/Pages/computing-index.aspx";
+QL_DEFAULT[13]="id1073"; id1073 = new Array(2);id1073[0]="Library";id1073[1]="https://www.uhd.edu/library/Pages/library-index.aspx";
+QL_DEFAULT[14]="id1082"; id1082 = new Array(2);id1082[0]="myUHD";id1082[1]="http://myuhd.uhd.edu/";
+QL_DEFAULT[15]="id1090"; id1090 = new Array(2);id1090[0]="Parking and Transportation Services";id1090[1]="https://www.uhd.edu/about/parking/Pages/parking-index.aspx";
+QL_DEFAULT[16]="id1093"; id1093 = new Array(2);id1093[0]="Police Department";id1093[1]="https://www.uhd.edu/police-department/Pages/default.aspx";
+QL_DEFAULT[17]="id1109"; id1109 = new Array(2);id1109[0]="Skyline News";id1109[1]="http://skyline.uhd.edu/";
+QL_DEFAULT[18]="id1122"; id1122 = new Array(2);id1122[0]="Student Life";id1122[1]="https://www.uhd.edu/student-life";
+QL_DEFAULT[19]="id1147"; id1147 = new Array(2);id1147[0]="Student Problem Solving Form";id1147[1]="https://www.uhd.edu/student-resources/problem/Pages/problem-index.aspx";
+QL_DEFAULT[20]="id1126"; id1126 = new Array(2);id1126[0]="Testing Services";id1126[1]="https://www.uhd.edu/testing/Pages/testing-index.aspx";
+ 
+// ----- END GLOBAL VARIABLE DEFINITIONS -----
+//Get all the quicklinks if there is a cookie (using this method caches the file)
+var QL_COOKIE=jQuery.readCookie(QL_COOKIE_NAME);
+var HAS_QL_COOKIE = false;
+if (QL_COOKIE!=null && QL_COOKIE!=""){
+	var scriptAllQL = document.createElement( 'script' );
+	scriptAllQL.type = 'text/javascript';
+	scriptAllQL.src = QL_ALL_FILE;
+	//console.log(QL_ALL_FILE);
+
+	document.getElementsByTagName("head")[0].appendChild( scriptAllQL );
+	HAS_QL_COOKIE = true;
+}
+
+jQuery(document).ready(function(){
+	try{
+		if(HAS_QL_COOKIE){ QL_ALL = window[QL_ALL_NAME]; }
+	 	checkQLCookie();						   
+	}catch(qlerror){
+		// quicklinks failed to load, prevent it from stopping other scripts
+		// from running
+	}
+});
+// will check to see if a quicklink cookie exists, if not will load defaults
+function checkQLCookie(){
+	if (QL_COOKIE!=null && QL_COOKIE!=""){
+		loadQLCookie();
+	}
+	else {		
+		
+	firstList = QL_DEFAULT.slice(0, 7);
+	secondList = QL_DEFAULT.slice(7, 14);
+	thirdList = QL_DEFAULT.slice(14);
+	
+		{ if(document.getElementById(QL_ID)){createQLList(firstList, QL_ID);}}
+		{ if(document.getElementById(QL_ID_2)){createQLList(secondList, QL_ID_2);}}
+		{ if(document.getElementById(QL_ID_3)){createQLList(thirdList, QL_ID_3);}}
+
+	
+		//{ if(document.getElementById(QL_ID)){createQLList(QL_DEFAULT, QL_ID);}}
+	}
+}
+
+// Given a string and preset format (currently only cookie)
+//   will break that string appropriately and return an array
+function createItemArrayFromStr(docStr, format){
+	if (format == "cookie"){
+	  // unescape cookie before splitting it
+		var splitStr = (unescape(docStr)).split("_");
+		var numItems = (splitStr.length);
+		var qlItems = new Array(numItems);
+		for (i = 0; i<numItems; i++){
+			qlItems[i] = splitStr[i];
+		}
+		return qlItems;
+	}else{
+		alert("unrecognized format");
+	}
+}
+// Creates a string from an array of items (that will be stored in the cookie)
+function createStrFromItemArray(itemArray){
+	var retStr = '';
+	for (i = 0; i <itemArray.length; i++)
+	{
+		//escape before placing it into the cookie (addresses safari error)
+		retStr += escape(itemArray[i]);
+		// don't show last _
+		if(i < itemArray.length - 1){
+			retStr += '_';
+		}
+	}
+	return retStr;
+}
+function loadQLCookie(){
+	var QL_COOKIE = jQuery.readCookie(QL_COOKIE_NAME);
+	if(QL_COOKIE != null || QL_COOKIE != ''){
+		var qlItems = createItemArrayFromStr(QL_COOKIE, "cookie");
+		
+		
+		firstList = qlItems.slice(0, 7);
+		secondList = qlItems.slice(7, 14);
+		thirdList = qlItems.slice(14, 23);
+		
+		//console.log(firstList);
+		//console.log(secondList);
+		//console.log(thirdList);
+	
+		{ if(document.getElementById(QL_ID)){createQLList(firstList, QL_ID);}}
+		{ if(document.getElementById(QL_ID_2)){createQLList(secondList, QL_ID_2);}}
+		{ if(document.getElementById(QL_ID_3)){createQLList(thirdList, QL_ID_3);}}
+		
+	}
+}
+
+function setQLCookie(qlItemArray)
+{	
+	var cookieStr = createStrFromItemArray(qlItemArray);
+	jQuery.setCookie(QL_COOKIE_NAME, cookieStr, 
+		{
+			duration: COOKIE_TIME,
+			path: '/',
+			domain: COOKIE_DOMAIN,
+			secure: false
+		}
+	);
+}
+
+function removeQLCookie(){
+	jQuery.setCookie(QL_COOKIE_NAME, '', 
+		{
+			duration: -1,
+			path: '/',
+			domain: COOKIE_DOMAIN,
+			secure: false
+		}
+	);
+}
+
+// Given an array of items and a ul id, will add lis of the item to the ul 
+// qlItemArray is a 3d array of a contentid, title, and URL
+function createQLList(qlItemArray, elementId){
+// element must exist before we do anything to it
+  if (document.getElementById(elementId)){
+		var qlList = document.getElementById(elementId);
+		// clear out anything that may already be there.
+		qlList.innerHTML = '';
+		var newNode, newItem;
+		// append the customize name & link to the beginning of QL_ID
+		if (elementId == QL_ID && CUSTOMIZE_URL != '' && CUSTOMIZE_NAME != ''){
+					newNode = document.createElement("li"); 
+					newItem = '<a href="'
+					+ CUSTOMIZE_URL
+					+ '">'
+					+ CUSTOMIZE_NAME
+					+ '</a>';
+					newNode.innerHTML = newItem;
+					qlList.appendChild(newNode);
+		}
+		for (i = 0; i < qlItemArray.length; i++){
+					newNode = document.createElement("li"); 
+					newItem = '<a href="'
+					+ window[qlItemArray[i]][1]
+					+ '">'
+					+ window[qlItemArray[i]][0]
+					+ '</a>';
+					newNode.innerHTML = newItem;
+					qlList.appendChild(newNode);
+		}
+		
+	}
+}

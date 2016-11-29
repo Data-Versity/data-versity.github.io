@@ -1,0 +1,29 @@
+﻿
+/* ==========================================================================
+	#UHD College of Sciences & Technology Colors
+========================================================================== */
+
+.main-head {
+	background: #8f8e8e;
+}
+.ms-core-listMenu-verticalBox > .ms-core-listMenu-item, .ms-core-listMenu-verticalBox li.static > .ms-core-listMenu-item {
+	/* background-color: #DFDFDF; */
+	/* border-top: 1px solid white; */
+}
+.ms-core-listMenu-verticalBox > .ms-core-listMenu-item, .ms-core-listMenu-verticalBox li.static > ul > li {
+	background-color: white;
+	border-top: 1px solid #DFDFDF;
+}
+.ms-core-listMenu-verticalBox > .ms-core-listMenu-selected:link, .ms-core-listMenu-selected:visited, .ms-core-listMenu-selected, a.static.selected.menu-item {
+	background-color: #8f8e8e;
+	color: white;
+}
+.ms-core-listMenu-verticalBox > ul > li.static > a:hover
+{ background: #8f8e8e; color: #fff; text-decoration: none; }
+
+.ms-core-listMenu-verticalBox > ul > li.static > ul > li.static > a:hover
+{ background: #8f8e8e; color: #fff; text-decoration: none; }
+
+.main-body-top h2, h2.pagetitle { 
+	color: #8f8e8e;
+}
