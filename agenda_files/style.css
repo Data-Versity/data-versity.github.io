@@ -1296,3 +1296,10 @@ p.credits { margin-top: 0;}
 	.select-toggle:before,
 	.socials a { background-image: url(images/sprite@x2.png); background-size: 295px 154px; }
 }
+
+/* ==========================================================================
+	#Santana
+========================================================================== */
+
+.santana1{border:0}
+hr { border-color: green;}
